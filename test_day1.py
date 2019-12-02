@@ -1,9 +1,6 @@
 from day1 import *
 import unittest
 
-def test_sum():
-    assert sum([1, 2, 3]) == 6, "Should be 6"
-
 def test_get_fuel_requirements_for_mass():
   assert get_fuel_requirements_for_mass(12) == 2
   assert get_fuel_requirements_for_mass(14) == 2
