@@ -1,5 +1,18 @@
+# Day 2 - part 1
 def run_intcode_computer(program):
   return run_program(program, 0)
+
+# Day 2 - part 2
+def find_input_brute_force(program, output):
+  for noun in range(0, 99):
+    for verb in range(0, 99):
+      memory = program.copy()
+      memory[1] = noun
+      memory[2] = verb
+      memory = run_program(memory, 0)
+      if memory[0] == output:
+        return memory
+  return "No solution found"
 
 def run_program(program, pointer):
   action = program[pointer]
@@ -12,7 +25,7 @@ def run_program(program, pointer):
   elif action == 99:
     return program
   else:
-    raise RuntimeError('Unknown action code')
+    raise RuntimeError('Unknown action code', action)
 
 def get_value_of_pointer(program, address):
   return program[program[address]]
@@ -29,7 +42,7 @@ def read_input_file(file_path):
 
 def main():
   program = read_input_file('input/day2.txt')
-  computer = run_intcode_computer(program)
+  computer = find_input_brute_force(program, 19690720)
   print(computer)
 
 main()
