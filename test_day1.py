@@ -12,3 +12,8 @@ def test_get_fuel_requirements_for_mass():
 
 def test_sum_fuel_requirements_for_all_modules_on_spacecraft():
   assert sum_fuel_requirements_for_all_modules_on_spacecraft([12, 14, 1969, 100756]) == 34241
+
+def test_get_fuel_requirements_for_mass_recursive():
+  assert get_fuel_requirements_for_mass_recursive(14) == 2
+  assert get_fuel_requirements_for_mass_recursive(1969) == 966
+  assert get_fuel_requirements_for_mass_recursive(100756) == 50346
