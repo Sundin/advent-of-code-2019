@@ -1,24 +1,24 @@
 def run_intcode_computer(program):
   return run_program(program, 0)
 
-def run_program(program, current_step):
-  action = program[current_step]
+def run_program(program, pointer):
+  action = program[pointer]
   if action == 1:
-    program[get_value(program, current_step+3)] = get_value_of_pointer(program, current_step+1) + get_value_of_pointer(program, current_step+2)
-    return run_program(program, current_step+4)
+    program[get_value(program, pointer+3)] = get_value_of_pointer(program, pointer+1) + get_value_of_pointer(program, pointer+2)
+    return run_program(program, pointer+4)
   elif action == 2:
-    program[get_value(program, current_step+3)] = get_value_of_pointer(program, current_step+1) * get_value_of_pointer(program, current_step+2)
-    return run_program(program, current_step+4)
+    program[get_value(program, pointer+3)] = get_value_of_pointer(program, pointer+1) * get_value_of_pointer(program, pointer+2)
+    return run_program(program, pointer+4)
   elif action == 99:
     return program
   else:
     raise RuntimeError('Unknown action code')
 
-def get_value_of_pointer(program, position):
-  return program[program[position]]
+def get_value_of_pointer(program, address):
+  return program[program[address]]
 
-def get_value(program, position):
-  return program[position]
+def get_value(program, address):
+  return program[address]
 
 def read_input_file(file_path):
   with open(file_path) as file:
