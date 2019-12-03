@@ -1,7 +1,13 @@
 Requires Python3 and virtualenv.
 
-source venv/bin/activate
+virtualenv venv
 
-pip install
+Mac:
+    source venv/bin/activate
+
+Windows: 
+    source venv/Scripts/activate
+
+pip install pytest
 
 python -m pytest
