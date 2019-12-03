@@ -2,13 +2,29 @@ import math
 
 grid_size = 10000
 
+def combined_distance_to_first_crossing(lines):
+    line1 = draw_line(lines[0])
+    line2 = draw_line(lines[1])
+    crossings = find_all_crossings(line1, line2)
+
+    distances = []
+    for crossing in crossings:
+        combined_distance = distance_til_crossing(line1, crossing) + distance_til_crossing(line2, crossing)
+        distances.append(combined_distance)
+    return min(distances)
+
+def distance_til_crossing(line, crossing):
+    distance = 0
+    for step in line:
+        distance += 1
+        if (step == crossing):
+            return distance
+
 
 def manhattan_distance_of_closest_crossing(lines):
     line1 = draw_line(lines[0])
     line2 = draw_line(lines[1])
-
     crossings = find_all_crossings(line1, line2)
-
     return find_closest_crossing(crossings)
 
 def  find_all_crossings(line1, line2):
@@ -82,8 +98,10 @@ def get_data_from_line(line):
 
 def main():
     lines = read_input_file('day3/input.txt')
-    answer = manhattan_distance_of_closest_crossing(lines)
-    print("Closest crossing", answer)
+    answer1 = manhattan_distance_of_closest_crossing(lines)
+    answer2 = combined_distance_to_first_crossing(lines)
+    print("Manhattan distance losest crossing:", answer1)
+    print("Shortest combined distance to crossing:", answer2)
 
 
 main()
