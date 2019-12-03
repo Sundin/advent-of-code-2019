@@ -41,7 +41,7 @@ def read_input_file(file_path):
     return content_as_int
 
 def main():
-  program = read_input_file('input/day2.txt')
+  program = read_input_file('day2/input.txt')
   computer = find_input_brute_force(program, 19690720)
   print(computer)
 

@@ -32,7 +32,7 @@ def read_input_file(file_path):
     return file_contents.split('\n')
 
 def main():
-  modules = read_input_file('input/day1.txt')
+  modules = read_input_file('day1/input.txt')
   modules_as_int = list(map(int, modules)) 
   fuel_req = sum_fuel_requirements_for_all_modules_on_spacecraft_recursive(modules_as_int)
   print(fuel_req)
