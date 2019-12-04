@@ -30,8 +30,7 @@ def is_matching_strict(digits):
 
         if digits[d] == digits[d-1]:
             no_twin_to_right = d == 5 or digits[d] != digits[d+1]
-            no_twin_to_left = d <= 2 or digits[d] != digits[d-2]
-            print(d, no_twin_to_left, no_twin_to_right)
+            no_twin_to_left = d <= 1 or digits[d] != digits[d-2]
             if no_twin_to_right and no_twin_to_left:
                 found_twins = True
 
