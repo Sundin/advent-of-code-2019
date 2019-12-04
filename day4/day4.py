@@ -22,9 +22,30 @@ def is_matching(digits):
     return found_twins
 
 
+def is_matching_strict(digits):
+    found_twins = False
+    for d in range(1, 6):
+        if digits[d] < digits[d-1]:
+            return False
+
+        if digits[d] == digits[d-1]:
+            no_twin_to_right = d == 5 or digits[d] != digits[d+1]
+            no_twin_to_left = d <= 2 or digits[d] != digits[d-2]
+            print(d, no_twin_to_left, no_twin_to_right)
+            if no_twin_to_right and no_twin_to_left:
+                found_twins = True
+
+    return found_twins
+
+
 def is_matching_number(number):
     digits = split_into_digits(number)
     return is_matching(digits)
+
+
+def is_matching_number_strict(number):
+    digits = split_into_digits(number)
+    return is_matching_strict(digits)
 
 
 # not used
@@ -45,7 +66,7 @@ def main():
     stop = 675869
     matching_passwords = 0
     for number in range(start, stop+1):
-        if (is_matching_number(number)):
+        if (is_matching_number_strict(number)):
             matching_passwords += 1
 
     print("Number of potential passwords:", matching_passwords)
