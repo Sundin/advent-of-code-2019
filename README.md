@@ -1,13 +1,35 @@
+# Advent of Code 2019
+
+## Setup
 Requires Python3 and virtualenv.
 
-virtualenv venv
+Create a virtual environment:
+    virtualenv venv
 
-Mac:
-    source venv/bin/activate
+Activate virtual environment:
 
-Windows: 
-    source venv/Scripts/activate
+* Mac:
 
-pip install pytest
+    `source venv/bin/activate`
 
-python -m pytest
+* Windows:
+
+    `source venv/Scripts/activate`
+
+Install dependencies:
+
+    pip install pytest
+
+Run unit tests:
+
+    python -m pytest
+
+Run main method:
+
+    python day1/day.py
+
+## Gotchas
+
+* Don't reuse variables as values might have changed (point by reference).
+* Write unit tests for simple cases that are easy to debug and make sure they pass.
+* Go for the simplest solution, not the most efficient or elegant.
