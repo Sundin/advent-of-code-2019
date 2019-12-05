@@ -112,8 +112,8 @@ def read_input_file(file_path):
 
 def main():
     program = read_input_file('day5/input.txt')
-    computer = run_intcode_computer(program, [1])
-    # print(computer)
+    output = get_intcode_computer_ouput(program, [1])
+    print(output)
 
 
-# main()
+main()
