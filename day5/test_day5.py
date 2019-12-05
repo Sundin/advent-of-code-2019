@@ -15,9 +15,44 @@ def test_run_intcode_computer_basic_op_codes():
         3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50]
 
 
-def test_run_intcode_computer_new_op_codes():
+def test_run_intcode_computer_opcodes_3_4():
     assert get_intcode_computer_ouput([3, 0, 4, 0, 99], [1]) == [1]
     assert get_intcode_computer_ouput([3, 0, 4, 0, 99], [666]) == [666]
+
+
+def test_run_intcode_computer_opcode_8():
+    assert get_intcode_computer_ouput([3,9,8,9,10,9,4,9,99,-1,8], [8]) == [1]
+    assert get_intcode_computer_ouput([3,9,8,9,10,9,4,9,99,-1,8], [9]) == [0]
+    assert get_intcode_computer_ouput([3,9,8,9,10,9,4,9,99,-1,8], [7]) == [0]
+    assert get_intcode_computer_ouput([3,3,1108,-1,8,3,4,3,99], [8]) == [1]
+    assert get_intcode_computer_ouput([3,3,1108,-1,8,3,4,3,99], [9]) == [0]
+    assert get_intcode_computer_ouput([3,3,1108,-1,8,3,4,3,99], [7]) == [0]
+
+
+def test_run_intcode_computer_opcode_7():
+    assert get_intcode_computer_ouput([3,9,7,9,10,9,4,9,99,-1,8], [8]) == [0]
+    assert get_intcode_computer_ouput([3,9,7,9,10,9,4,9,99,-1,8], [9]) == [0]
+    assert get_intcode_computer_ouput([3,9,7,9,10,9,4,9,99,-1,8], [7]) == [1]
+    assert get_intcode_computer_ouput([3,3,1107,-1,8,3,4,3,99], [8]) == [0]
+    assert get_intcode_computer_ouput([3,3,1107,-1,8,3,4,3,99], [9]) == [0]
+    assert get_intcode_computer_ouput([3,3,1107,-1,8,3,4,3,99], [7]) == [1]
+
+def test_run_intcode_computer_opcodes_5_6():
+    assert get_intcode_computer_ouput([3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9], [0]) == [0]
+    assert get_intcode_computer_ouput([3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9], [666]) == [1]
+    assert get_intcode_computer_ouput([3,3,1105,-1,9,1101,0,0,12,4,12,99,1], [0]) == [0]
+    assert get_intcode_computer_ouput([3,3,1105,-1,9,1101,0,0,12,4,12,99,1], [666]) == [1]
+
+def test_advanced_opcodes():
+    assert get_intcode_computer_ouput([3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+    1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+    999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99], [8]) == [1000]
+    assert get_intcode_computer_ouput([3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+    1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+    999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99], [7]) == [999]
+    assert get_intcode_computer_ouput([3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+    1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+    999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99], [9]) == [1001]
 
 
 def test_get_action_code():
@@ -31,3 +66,4 @@ def test_get_parameter_modes():
     assert get_parameter_modes(11102) == [1, 1, 1]
     assert get_parameter_modes(1102) == [0, 1, 1]
     assert get_parameter_modes(2) == [0, 0, 0]
+    assert get_parameter_modes(102) == [0, 0, 1]
