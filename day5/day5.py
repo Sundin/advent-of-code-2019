@@ -22,8 +22,7 @@ def run_program(program, pointer, input, output):
             program, pointer+1, parameter_modes[2])
         parameter2 = get_as_value_or_pointer(
             program, pointer+2, parameter_modes[1])
-        parameter3 = get_as_value_or_pointer(
-            program, pointer+3, parameter_modes[0])
+        parameter3 = get_as_value(program, pointer+3)
 
         program[parameter3] = parameter1 + parameter2
         return run_program(program, pointer+4, input, output)
@@ -32,14 +31,12 @@ def run_program(program, pointer, input, output):
             program, pointer+1, parameter_modes[2])
         parameter2 = get_as_value_or_pointer(
             program, pointer+2, parameter_modes[1])
-        parameter3 = get_as_value_or_pointer(
-            program, pointer+3, parameter_modes[0])
+        parameter3 = get_as_value(program, pointer+3)
 
         program[parameter3] = parameter1 * parameter2
         return run_program(program, pointer+4, input, output)
     elif action == 3:
-        parameter1 = get_as_value_or_pointer(
-            program, pointer+1, parameter_modes[2])
+        parameter1 = get_as_value(program, pointer+1)
 
         program[parameter1] = input.pop(0)
         return run_program(program, pointer+2, input, output)

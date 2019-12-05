@@ -17,6 +17,7 @@ def test_run_intcode_computer_basic_op_codes():
 
 def test_run_intcode_computer_new_op_codes():
     assert get_intcode_computer_ouput([3, 0, 4, 0, 99], [1]) == [1]
+    assert get_intcode_computer_ouput([3, 0, 4, 0, 99], [666]) == [666]
 
 
 def test_get_action_code():
