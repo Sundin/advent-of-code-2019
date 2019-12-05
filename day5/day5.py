@@ -1,34 +1,66 @@
 
-def run_intcode_computer(program):
-    return run_program(program, 0, [], [])
-
-
-def get_intcode_computer_ouput(program, input):
+def run_intcode_computer(program, input):
     return run_program(program, 0, input, [])
 
 
+def get_intcode_computer_ouput(program, input):
+    result = run_program(program, 0, input, [])
+    return result[1]
+
+
+def get_intcode_computer_finished_program(program, input):
+    result = run_program(program, 0, input, [])
+    return result[0]
+
+
 def run_program(program, pointer, input, output):
-    print(program, pointer, input, output)
     action = get_action_code(program[pointer])
     parameter_modes = get_parameter_modes(program[pointer])
+
     if action == 1:
-        program[get_as_value(program, pointer+3)] = get_as_pointer(program,
-                                                                   pointer+1) + get_as_pointer(program, pointer+2)
+        parameter1 = get_as_value_or_pointer(
+            program, pointer+1, parameter_modes[2])
+        parameter2 = get_as_value_or_pointer(
+            program, pointer+2, parameter_modes[1])
+        parameter3 = get_as_value_or_pointer(
+            program, pointer+3, parameter_modes[0])
+
+        program[parameter3] = parameter1 + parameter2
         return run_program(program, pointer+4, input, output)
     elif action == 2:
-        program[get_as_value(program, pointer+3)] = get_as_pointer(program,
-                                                                   pointer+1) * get_as_pointer(program, pointer+2)
+        parameter1 = get_as_value_or_pointer(
+            program, pointer+1, parameter_modes[2])
+        parameter2 = get_as_value_or_pointer(
+            program, pointer+2, parameter_modes[1])
+        parameter3 = get_as_value_or_pointer(
+            program, pointer+3, parameter_modes[0])
+
+        program[parameter3] = parameter1 * parameter2
         return run_program(program, pointer+4, input, output)
     elif action == 3:
-        program[get_as_value(program, pointer+1)] = input.pop(0)
+        parameter1 = get_as_value_or_pointer(
+            program, pointer+1, parameter_modes[2])
+
+        program[parameter1] = input.pop(0)
         return run_program(program, pointer+2, input, output)
     elif action == 4:
-        output.append(get_as_pointer(program, pointer+1))
+        parameter1 = get_as_value_or_pointer(
+            program, pointer+1, parameter_modes[2])
+        output.append(parameter1)
         return run_program(program, pointer+2, input, output)
     elif action == 9:  # should be 99
-        return output
+        return (program, output)
     else:
         raise RuntimeError('Unknown action code', action)
+
+
+def get_as_value_or_pointer(program, pointer, mode):
+    if mode == 0:
+        return get_as_pointer(program, pointer)
+    elif mode == 1:
+        return get_as_value(program, pointer)
+    else:
+        raise RuntimeError('Unknown parameter mode', mode)
 
 
 def get_action_code(opcode):
@@ -41,8 +73,11 @@ def get_parameter_modes(opcode):
     # 0: position_mode - get_as_pointer - default
     # 1: immediate_mode - get_as_value
     digits = split_into_digits(opcode)
-    del digits[-1]
-    del digits[-1]
+    try:
+        del digits[-1]
+        del digits[-1]
+    except IndexError:
+        print("ignore error")
 
     parameter_modes = [0, 0, 0]
     number_of_digits = len(digits)
@@ -80,8 +115,8 @@ def read_input_file(file_path):
 
 def main():
     program = read_input_file('day5/input.txt')
-    computer = run_intcode_computer(program)
-    print(computer)
+    computer = run_intcode_computer(program, [1])
+    # print(computer)
 
 
 # main()
