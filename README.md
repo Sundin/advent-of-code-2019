@@ -28,9 +28,10 @@ Run main method:
 
     python day1/day.py
 
-## Gotchas
+## Learnings
 
 * Don't reuse variables as values might have changed (point by reference).
 * Write unit tests for simple cases that are easy to debug and make sure they pass.
 * Go for the simplest solution, not the most efficient or elegant.
 * Make sure to write your code in a way so that you can easily copy paste the examples into your unit tests.
+* Assertions can be used in the actual code as well to catch bugs.

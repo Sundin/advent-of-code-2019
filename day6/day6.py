@@ -38,21 +38,23 @@ def split_into_orbit_pairs(input):
     return pairs
 
 def is_ancestor_of(ancestor, descendant):
+    assert isinstance(ancestor, Planet)
+    assert isinstance(descendant, Planet)
     if descendant.parent == "":
         return False
     elif descendant.parent == ancestor:
         return True
     return is_ancestor_of(ancestor, descendant.parent)
 
-def steps_to_transfer_to_common_ancestor(input, start, target):
+def steps_to_transfer_to_common_ancestor(input, startName, targetName):
     orbit_map = get_orbital_map(input)
-    return steps_to_ancestor_helper(orbit_map, start, target)
+    return steps_to_ancestor_helper(orbit_map, startName, targetName)
 
-def steps_to_ancestor_helper(orbit_map, start, target):
-    start_parent = orbit_map[start].parent
-    if is_ancestor_of(start_parent, orbit_map[target]):
+def steps_to_ancestor_helper(orbit_map, startName, targetName):
+    start_parent = orbit_map[startName].parent
+    if is_ancestor_of(start_parent, orbit_map[targetName]):
         return 0
-    return 1 + steps_to_ancestor_helper(orbit_map, start_parent.name, target)
+    return 1 + steps_to_ancestor_helper(orbit_map, start_parent.name, targetName)
 
 def distance(ancestor, descendant):
     if descendant == ancestor:
@@ -61,17 +63,17 @@ def distance(ancestor, descendant):
         return 1
     return 1 + distance(ancestor, descendant.parent)
 
-def get_common_ancestor(orbit_map, start, target):
-    start_parent = orbit_map[start].parent
-    if is_ancestor_of(start_parent, orbit_map[target]):
+def get_common_ancestor(orbit_map, startName, targetName):
+    start_parent = orbit_map[startName].parent
+    if is_ancestor_of(start_parent, orbit_map[targetName]):
         assert isinstance(start_parent, Planet)
         return start_parent
-    return get_common_ancestor(orbit_map, start_parent.name, target)
+    return get_common_ancestor(orbit_map, start_parent.name, targetName)
 
-def calculate_orbital_transfer_distance(input, start, target):
+def calculate_orbital_transfer_distance(input, startName, targetName):
     orbit_map = get_orbital_map(input)
-    common_ancestor = get_common_ancestor(orbit_map, start, target)
-    return distance(common_ancestor, orbit_map[start]) + distance(common_ancestor, orbit_map[target]) - 2
+    common_ancestor = get_common_ancestor(orbit_map, startName, targetName)
+    return distance(common_ancestor, orbit_map[startName]) + distance(common_ancestor, orbit_map[targetName]) - 2
 
 class Planet(object):
     def __init__(self, name):
