@@ -1,5 +1,9 @@
 
 def total_number_of_orbits(input):
+    orbital_map = get_orbital_map(input)
+    return count_all_orbits(orbital_map)
+
+def get_orbital_map(input):
     all_planets = {}
     orbit_pairs = split_into_orbit_pairs(input)
     for pair in orbit_pairs:
@@ -10,7 +14,7 @@ def total_number_of_orbits(input):
             all_planets[planets[1]] = Planet(planets[1])
         all_planets[planets[0]].add_child(all_planets[planets[1]])
         all_planets[planets[1]].set_parent(all_planets[planets[0]])
-    return count_all_orbits(all_planets)
+    return all_planets
 
 def count_all_orbits(orbit_map):
     sum = 0
@@ -32,6 +36,42 @@ def split_into_orbit_pairs(input):
     pairs = input.split('\n')
     pairs = list(map(str.strip, pairs))
     return pairs
+
+def is_ancestor_of(ancestor, descendant):
+    if descendant.parent == "":
+        return False
+    elif descendant.parent == ancestor:
+        return True
+    return is_ancestor_of(ancestor, descendant.parent)
+
+def steps_to_transfer_to_common_ancestor(input, start, target):
+    orbit_map = get_orbital_map(input)
+    return steps_to_ancestor_helper(orbit_map, start, target)
+
+def steps_to_ancestor_helper(orbit_map, start, target):
+    start_parent = orbit_map[start].parent
+    if is_ancestor_of(start_parent, orbit_map[target]):
+        return 0
+    return 1 + steps_to_ancestor_helper(orbit_map, start_parent.name, target)
+
+def distance(ancestor, descendant):
+    if descendant == ancestor:
+        return 0
+    elif descendant.parent == ancestor:
+        return 1
+    return 1 + distance(ancestor, descendant.parent)
+
+def get_common_ancestor(orbit_map, start, target):
+    start_parent = orbit_map[start].parent
+    if is_ancestor_of(start_parent, orbit_map[target]):
+        assert isinstance(start_parent, Planet)
+        return start_parent
+    return get_common_ancestor(orbit_map, start_parent.name, target)
+
+def calculate_orbital_transfer_distance(input, start, target):
+    orbit_map = get_orbital_map(input)
+    common_ancestor = get_common_ancestor(orbit_map, start, target)
+    return distance(common_ancestor, orbit_map[start]) + distance(common_ancestor, orbit_map[target]) - 2
 
 class Planet(object):
     def __init__(self, name):
@@ -56,5 +96,8 @@ def main():
     input = read_input_file('day6/input.txt')
     orbits = total_number_of_orbits(input)
     print("Answer 1:", orbits)
+    input = read_input_file('day6/input.txt')
+    orbital_transfer_distance = calculate_orbital_transfer_distance(input, "YOU", "SAN")
+    print("Answer 2:", orbital_transfer_distance)
 
 main()
