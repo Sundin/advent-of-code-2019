@@ -13,12 +13,15 @@ def get_intcode_computer_finished_program(program, input):
     return result[0]
 
 
+# Returns (program, output, current_pointer/"DONE")
 def run_program(program, pointer, input, output):
     action = get_action_code(program[pointer])
     parameter_modes = get_parameter_modes(program[pointer])
 
+    ### Addition ###
     if action == 1:
-        # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
+        # print(get_as_value(program, pointer), get_as_value(program, pointer+1),
+        #       get_as_value(program, pointer+2), get_as_value(program, pointer+3))
         parameter1 = get_as_value_or_pointer(
             program, pointer+1, parameter_modes[2])
         parameter2 = get_as_value_or_pointer(
@@ -27,6 +30,8 @@ def run_program(program, pointer, input, output):
 
         program[parameter3] = parameter1 + parameter2
         return run_program(program, pointer+4, input, output)
+
+    ### Multiplication ###
     elif action == 2:
         # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
         parameter1 = get_as_value_or_pointer(
@@ -37,17 +42,27 @@ def run_program(program, pointer, input, output):
 
         program[parameter3] = parameter1 * parameter2
         return run_program(program, pointer+4, input, output)
+
+    ### Input ###
     elif action == 3:
         # print(get_as_value(program, pointer), get_as_value(program, pointer+1))
+        if len(input) == 0:
+            print("HALTING AT", pointer)
+            return (program, output, pointer)
+
         parameter1 = get_as_value(program, pointer+1)
         program[parameter1] = input.pop(0)
         return run_program(program, pointer+2, input, output)
+
+    ### Output ###
     elif action == 4:
         # print(get_as_value(program, pointer), get_as_value(program, pointer+1))
         parameter1 = get_as_value_or_pointer(
             program, pointer+1, parameter_modes[2])
         output.append(parameter1)
         return run_program(program, pointer+2, input, output)
+
+    ### Jump if not 0 ###
     elif action == 5:
         # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2))
         parameter1 = get_as_value_or_pointer(
@@ -57,6 +72,8 @@ def run_program(program, pointer, input, output):
         if parameter1 != 0:
             return run_program(program, parameter2, input, output)
         return run_program(program, pointer+3, input, output)
+
+    ### Jump if 0 ###
     elif action == 6:
         # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2))
         parameter1 = get_as_value_or_pointer(
@@ -66,6 +83,8 @@ def run_program(program, pointer, input, output):
         if parameter1 == 0:
             return run_program(program, parameter2, input, output)
         return run_program(program, pointer+3, input, output)
+
+    ### Less than ###
     elif action == 7:
         # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
         parameter1 = get_as_value_or_pointer(
@@ -80,6 +99,8 @@ def run_program(program, pointer, input, output):
         if pointer == parameter3:
             run_program(program, pointer, input, output)
         return run_program(program, pointer+4, input, output)
+
+    ### Equals ###
     elif action == 8:
         # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
         parameter1 = get_as_value_or_pointer(
@@ -94,12 +115,13 @@ def run_program(program, pointer, input, output):
         if pointer == parameter3:
             run_program(program, pointer, input, output)
         return run_program(program, pointer+4, input, output)
+
+    ### Exit ###
     elif action == 9:  # should be 99
         # print("99")
-        return (program, output)
+        return (program, output, "DONE")
     else:
         raise RuntimeError('Unknown action code', action)
-    print(program[6])
 
 
 def get_as_value_or_pointer(program, pointer, mode):
