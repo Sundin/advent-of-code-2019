@@ -17,6 +17,17 @@ def get_image_layers(data, width, height):
     return layers
 
 
+def get_pixel_in_position(data, width, height, position):
+    layers = get_image_layers(data, width, height)
+    pixels = []
+    for layer in layers:
+        pixels.append(layer[position])
+    for pixel in pixels:
+        if pixel != "2":
+            return pixel
+    return "2"
+
+
 def read_input_file(file_path):
     with open(file_path) as file:
         file_contents = file.read()
@@ -39,6 +50,16 @@ def main():
             number_of_2 = count_digits(layer, 2)
 
     print("Answer 1:", number_of_1 * number_of_2)
+
+    for row in range(0, 6):
+        row_pixels = ""
+        for i in range(0, 25):
+            pixel = get_pixel_in_position(input, 25, 6, i + (row * 25))
+            if pixel == "0":
+                row_pixels += " "
+            elif pixel == "1":
+                row_pixels += "¶"
+        print(row_pixels)
 
 
 main()
