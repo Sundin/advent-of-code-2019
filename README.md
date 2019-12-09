@@ -1,20 +1,21 @@
 # Advent of Code 2019
 
 ## Setup
+
 Requires Python3 and virtualenv.
 
 Create a virtual environment:
-    virtualenv venv
+virtualenv venv
 
 Activate virtual environment:
 
-* Mac:
+- Mac:
 
-    `source venv/bin/activate`
+  `source venv/bin/activate`
 
-* Windows:
+- Windows:
 
-    `source venv/Scripts/activate`
+  `source venv/Scripts/activate`
 
 Install dependencies:
 
@@ -30,8 +31,9 @@ Run main method:
 
 ## Learnings
 
-* Don't reuse variables as values might have changed (point by reference).
-* Write unit tests for simple cases that are easy to debug and make sure they pass.
-* Go for the simplest solution, not the most efficient or elegant.
-* Make sure to write your code in a way so that you can easily copy paste the examples into your unit tests.
-* Assertions can be used in the actual code as well to catch bugs.
+- Don't reuse variables as values might have changed (point by reference).
+- Write unit tests for simple cases that are easy to debug and make sure they pass.
+- Go for the simplest solution, not the most efficient or elegant.
+- Make sure to write your code in a way so that you can easily copy paste the examples into your unit tests.
+- Assertions can be used in the actual code as well to catch bugs.
+- Beware of reusing the same filename in different folders.

@@ -58,8 +58,9 @@ def run_program_with_relative_base(program, pointer, relative_base, input, outpu
         #     print("HALTING AT", pointer)
         #     return (program, output, pointer)
 
-        parameter1 = get_as_value(program, pointer+1)
-        program[parameter1] = input.pop(0)
+        address = get_for_writing(
+            program, pointer+1, parameter_modes[2], relative_base)
+        write_value(program, address, input.pop(0))
         return run_program_with_relative_base(program, pointer+2, relative_base, input, output)
 
     ### Output ###
@@ -138,6 +139,18 @@ def run_program_with_relative_base(program, pointer, relative_base, input, outpu
     else:
         raise RuntimeError('Unknown action code', action)
     raise RuntimeError('Out of bounds')
+
+
+def get_for_writing(program, pointer, mode, relative_base):
+    if mode == 0:
+        return get_as_value(program, pointer)
+    elif mode == 1:
+        raise RuntimeError("not implemented", mode)
+    elif mode == 2:
+        return get_as_value(program, pointer+1) + relative_base
+        # return get_as_relative_base(program, pointer, relative_base)
+    else:
+        raise RuntimeError('Unknown parameter mode', mode)
 
 
 def get_as_value_or_pointer(program, pointer, mode, relative_base):
