@@ -7,10 +7,9 @@ def main():
     output1 = get_intcode_computer_ouput(program, [1])
     print("Answer1:", output1)
 
-    program = read_input_file('day9/input.txt')
-    sys.setrecursionlimit(32000)
-    output2 = get_intcode_computer_ouput(program, [2])
-    print("Answer1:", output2)
+    program2 = read_input_file('day9/input.txt')
+    output2 = get_intcode_computer_ouput(program2, [2])
+    print("Answer2:", output2)
 
 
 main()

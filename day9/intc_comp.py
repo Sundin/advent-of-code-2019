@@ -23,127 +23,129 @@ def get_final_relative_base(program):
 
 def run_program_with_relative_base(program, pointer, relative_base, input, output):
     # Returns (program, output, current_pointer/"DONE", relative_base)
-    action = get_action_code(program[pointer])
-    parameter_modes = get_parameter_modes(program[pointer])
 
-    ### Addition ###
-    if action == 1:
-        # print(get_as_value(program, pointer), get_as_value(program, pointer+1),
-        #       get_as_value(program, pointer+2), get_as_value(program, pointer+3))
-        parameter1 = get_as_value_or_pointer(
-            program, pointer+1, parameter_modes[2], relative_base)
-        parameter2 = get_as_value_or_pointer(
-            program, pointer+2, parameter_modes[1], relative_base)
-        parameter3 = get_for_writing(
-            program, pointer+3, parameter_modes[0], relative_base)
+    while True:
+        action = get_action_code(program[pointer])
+        parameter_modes = get_parameter_modes(program[pointer])
 
-        write_value(program, parameter3, parameter1 + parameter2)
-        return run_program_with_relative_base(program, pointer+4, relative_base, input, output)
+        ### Addition ###
+        if action == 1:
+            # print(get_as_value(program, pointer), get_as_value(program, pointer+1),
+            #       get_as_value(program, pointer+2), get_as_value(program, pointer+3))
+            parameter1 = get_as_value_or_pointer(
+                program, pointer+1, parameter_modes[2], relative_base)
+            parameter2 = get_as_value_or_pointer(
+                program, pointer+2, parameter_modes[1], relative_base)
+            parameter3 = get_for_writing(
+                program, pointer+3, parameter_modes[0], relative_base)
 
-    ### Multiplication ###
-    elif action == 2:
-        # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
-        parameter1 = get_as_value_or_pointer(
-            program, pointer+1, parameter_modes[2], relative_base)
-        parameter2 = get_as_value_or_pointer(
-            program, pointer+2, parameter_modes[1], relative_base)
-        parameter3 = get_for_writing(
-            program, pointer+3, parameter_modes[0], relative_base)
+            write_value(program, parameter3, parameter1 + parameter2)
+            pointer += 4
 
-        write_value(program, parameter3, parameter1 * parameter2)
-        return run_program_with_relative_base(program, pointer+4, relative_base, input, output)
+        ### Multiplication ###
+        elif action == 2:
+            # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
+            parameter1 = get_as_value_or_pointer(
+                program, pointer+1, parameter_modes[2], relative_base)
+            parameter2 = get_as_value_or_pointer(
+                program, pointer+2, parameter_modes[1], relative_base)
+            parameter3 = get_for_writing(
+                program, pointer+3, parameter_modes[0], relative_base)
 
-    ### Input ###
-    elif action == 3:
-        # print(get_as_value(program, pointer), get_as_value(program, pointer+1))
-        # if len(input) == 0:
-        #     print("HALTING AT", pointer)
-        #     return (program, output, pointer)
+            write_value(program, parameter3, parameter1 * parameter2)
+            pointer += 4
 
-        address = get_for_writing(
-            program, pointer+1, parameter_modes[2], relative_base)
-        write_value(program, address, input.pop(0))
-        return run_program_with_relative_base(program, pointer+2, relative_base, input, output)
+        ### Input ###
+        elif action == 3:
+            # print(get_as_value(program, pointer), get_as_value(program, pointer+1))
+            # if len(input) == 0:
+            #     print("HALTING AT", pointer)
+            #     return (program, output, pointer)
 
-    ### Output ###
-    elif action == 4:
-        # print(get_as_value(program, pointer), get_as_value(program, pointer+1))
-        parameter1 = get_as_value_or_pointer(
-            program, pointer+1, parameter_modes[2], relative_base)
-        output.append(parameter1)
-        return run_program_with_relative_base(program, pointer+2, relative_base, input, output)
+            address = get_for_writing(
+                program, pointer+1, parameter_modes[2], relative_base)
+            write_value(program, address, input.pop(0))
+            pointer += 2
 
-    ### Jump if not 0 ###
-    elif action == 5:
-        # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2))
-        parameter1 = get_as_value_or_pointer(
-            program, pointer+1, parameter_modes[2], relative_base)
-        parameter2 = get_as_value_or_pointer(
-            program, pointer+2, parameter_modes[1], relative_base)
-        if parameter1 != 0:
-            return run_program_with_relative_base(program, parameter2, relative_base, input, output)
-        return run_program_with_relative_base(program, pointer+3, relative_base, input, output)
+        ### Output ###
+        elif action == 4:
+            # print(get_as_value(program, pointer), get_as_value(program, pointer+1))
+            parameter1 = get_as_value_or_pointer(
+                program, pointer+1, parameter_modes[2], relative_base)
+            output.append(parameter1)
+            pointer += 2
 
-    ### Jump if 0 ###
-    elif action == 6:
-        # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2))
-        parameter1 = get_as_value_or_pointer(
-            program, pointer+1, parameter_modes[2], relative_base)
-        parameter2 = get_as_value_or_pointer(
-            program, pointer+2, parameter_modes[1], relative_base)
-        if parameter1 == 0:
-            return run_program_with_relative_base(program, parameter2, relative_base, input, output)
-        return run_program_with_relative_base(program, pointer+3, relative_base, input, output)
+        ### Jump if not 0 ###
+        elif action == 5:
+            # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2))
+            parameter1 = get_as_value_or_pointer(
+                program, pointer+1, parameter_modes[2], relative_base)
+            parameter2 = get_as_value_or_pointer(
+                program, pointer+2, parameter_modes[1], relative_base)
+            if parameter1 != 0:
+                pointer = parameter2
+            else:
+                pointer += 3
 
-    ### Less than ###
-    elif action == 7:
-        # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
-        parameter1 = get_as_value_or_pointer(
-            program, pointer+1, parameter_modes[2], relative_base)
-        parameter2 = get_as_value_or_pointer(
-            program, pointer+2, parameter_modes[1], relative_base)
-        parameter3 = get_for_writing(
-            program, pointer+3, parameter_modes[0], relative_base)
-        if parameter1 < parameter2:
-            write_value(program, parameter3, 1)
+        ### Jump if 0 ###
+        elif action == 6:
+            # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2))
+            parameter1 = get_as_value_or_pointer(
+                program, pointer+1, parameter_modes[2], relative_base)
+            parameter2 = get_as_value_or_pointer(
+                program, pointer+2, parameter_modes[1], relative_base)
+            if parameter1 == 0:
+                pointer = parameter2
+            else:
+                pointer += 3
+
+        ### Less than ###
+        elif action == 7:
+            # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
+            parameter1 = get_as_value_or_pointer(
+                program, pointer+1, parameter_modes[2], relative_base)
+            parameter2 = get_as_value_or_pointer(
+                program, pointer+2, parameter_modes[1], relative_base)
+            parameter3 = get_for_writing(
+                program, pointer+3, parameter_modes[0], relative_base)
+            if parameter1 < parameter2:
+                write_value(program, parameter3, 1)
+            else:
+                write_value(program, parameter3, 0)
+
+            if pointer != parameter3:
+                pointer += 4
+
+        ### Equals ###
+        elif action == 8:
+            # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
+            parameter1 = get_as_value_or_pointer(
+                program, pointer+1, parameter_modes[2], relative_base)
+            parameter2 = get_as_value_or_pointer(
+                program, pointer+2, parameter_modes[1], relative_base)
+            parameter3 = get_for_writing(
+                program, pointer+3, parameter_modes[0], relative_base)
+            if parameter1 == parameter2:
+                write_value(program, parameter3, 1)
+            else:
+                write_value(program, parameter3, 0)
+
+            if pointer != parameter3:
+                pointer += 4
+
+        # Adjust relative_base
+        elif action == 9:
+            parameter1 = get_as_value_or_pointer(
+                program, pointer+1, parameter_modes[2], relative_base)
+            pointer += 2
+            relative_base += parameter1
+
+            ### Exit ###
+        elif action == 99:
+            return (program, output, "DONE", relative_base)
         else:
-            write_value(program, parameter3, 0)
-        if pointer == parameter3:
-            run_program_with_relative_base(
-                program, pointer, relative_base, input, output)
-        return run_program_with_relative_base(program, pointer+4, relative_base, input, output)
-
-    ### Equals ###
-    elif action == 8:
-        # print(get_as_value(program, pointer), get_as_value(program, pointer+1), get_as_value(program, pointer+2), get_as_value(program, pointer+3))
-        parameter1 = get_as_value_or_pointer(
-            program, pointer+1, parameter_modes[2], relative_base)
-        parameter2 = get_as_value_or_pointer(
-            program, pointer+2, parameter_modes[1], relative_base)
-        parameter3 = get_for_writing(
-            program, pointer+3, parameter_modes[0], relative_base)
-        if parameter1 == parameter2:
-            write_value(program, parameter3, 1)
-        else:
-            write_value(program, parameter3, 0)
-        if pointer == parameter3:
-            run_program_with_relative_base(
-                program, pointer, relative_base, input, output)
-        return run_program_with_relative_base(program, pointer+4, relative_base, input, output)
-
-    # Adjust relative_base
-    elif action == 9:
-        parameter1 = get_as_value_or_pointer(
-            program, pointer+1, parameter_modes[2], relative_base)
-        # parameter1 = get_as_value(program, pointer+1)
-        return run_program_with_relative_base(program, pointer+2, relative_base+parameter1, input, output)
-
-        ### Exit ###
-    elif action == 99:
-        return (program, output, "DONE", relative_base)
-    else:
-        raise RuntimeError('Unknown action code', action)
-    raise RuntimeError('Out of bounds')
+            raise RuntimeError('Unknown action code', action)
+    return (program, output, "DONE", relative_base)
 
 
 def get_for_writing(program, pointer, mode, relative_base):
