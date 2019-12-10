@@ -34,7 +34,8 @@ def run_program_with_relative_base(program, pointer, relative_base, input, outpu
             program, pointer+1, parameter_modes[2], relative_base)
         parameter2 = get_as_value_or_pointer(
             program, pointer+2, parameter_modes[1], relative_base)
-        parameter3 = get_as_value(program, pointer+3)
+        parameter3 = get_for_writing(
+            program, pointer+3, parameter_modes[0], relative_base)
 
         write_value(program, parameter3, parameter1 + parameter2)
         return run_program_with_relative_base(program, pointer+4, relative_base, input, output)
@@ -46,7 +47,8 @@ def run_program_with_relative_base(program, pointer, relative_base, input, outpu
             program, pointer+1, parameter_modes[2], relative_base)
         parameter2 = get_as_value_or_pointer(
             program, pointer+2, parameter_modes[1], relative_base)
-        parameter3 = get_as_value(program, pointer+3)
+        parameter3 = get_for_writing(
+            program, pointer+3, parameter_modes[0], relative_base)
 
         write_value(program, parameter3, parameter1 * parameter2)
         return run_program_with_relative_base(program, pointer+4, relative_base, input, output)
@@ -100,7 +102,8 @@ def run_program_with_relative_base(program, pointer, relative_base, input, outpu
             program, pointer+1, parameter_modes[2], relative_base)
         parameter2 = get_as_value_or_pointer(
             program, pointer+2, parameter_modes[1], relative_base)
-        parameter3 = get_as_value(program, pointer+3)
+        parameter3 = get_for_writing(
+            program, pointer+3, parameter_modes[0], relative_base)
         if parameter1 < parameter2:
             write_value(program, parameter3, 1)
         else:
@@ -117,7 +120,8 @@ def run_program_with_relative_base(program, pointer, relative_base, input, outpu
             program, pointer+1, parameter_modes[2], relative_base)
         parameter2 = get_as_value_or_pointer(
             program, pointer+2, parameter_modes[1], relative_base)
-        parameter3 = get_as_value(program, pointer+3)
+        parameter3 = get_for_writing(
+            program, pointer+3, parameter_modes[0], relative_base)
         if parameter1 == parameter2:
             write_value(program, parameter3, 1)
         else:
@@ -131,6 +135,7 @@ def run_program_with_relative_base(program, pointer, relative_base, input, outpu
     elif action == 9:
         parameter1 = get_as_value_or_pointer(
             program, pointer+1, parameter_modes[2], relative_base)
+        # parameter1 = get_as_value(program, pointer+1)
         return run_program_with_relative_base(program, pointer+2, relative_base+parameter1, input, output)
 
         ### Exit ###
@@ -147,7 +152,7 @@ def get_for_writing(program, pointer, mode, relative_base):
     elif mode == 1:
         raise RuntimeError("not implemented", mode)
     elif mode == 2:
-        return get_as_value(program, pointer+1) + relative_base
+        return get_as_value(program, pointer) + relative_base
         # return get_as_relative_base(program, pointer, relative_base)
     else:
         raise RuntimeError('Unknown parameter mode', mode)
