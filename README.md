@@ -37,3 +37,4 @@ Run main method:
 - Make sure to write your code in a way so that you can easily copy paste the examples into your unit tests.
 - Assertions can be used in the actual code as well to catch bugs.
 - Beware of reusing the same filename in different folders.
+- A simple loop is often more performance efficient than recursion.
